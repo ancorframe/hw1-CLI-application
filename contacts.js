@@ -1,15 +1,16 @@
 const fs = require("fs").promises;
 const path = require("path");
+const { v4: uuidv4 } = require("uuid");
 
 const contactsPath = path.resolve("./db/contacts.json");
 
-// TODO: задокументувати кожну функцію
+
 async function listContacts() {
   try {
     const list = JSON.parse(await fs.readFile(contactsPath, "utf-8"));
     return console.table(list);;
   } catch (error) {
-    console.error;
+    console.error(error);
   }
 }
 
@@ -19,7 +20,7 @@ async function getContactById(contactId) {
     const contact = list.find(({ id }) => id === contactId);
     return console.log(contact);;
   } catch (error) {
-    console.error;
+    console.error(error);
   }
 }
 
@@ -30,7 +31,7 @@ async function removeContact(contactId) {
      await fs.writeFile(contactsPath, newList);
     return console.log("Contact remove");;
   } catch (error) {
-    console.error;
+    console.error(error);
   }
 }
 
@@ -38,7 +39,7 @@ async function addContact(name, email, phone) {
   try {
     const list = JSON.parse(await fs.readFile(contactsPath, "utf-8"));
     const newContact = {
-      id: Date.now(),
+      id: uuidv4(),
       name,
       email,
       phone,
@@ -47,7 +48,7 @@ async function addContact(name, email, phone) {
     await fs.writeFile(contactsPath, newList);
     return console.log(`${name} added to contacts`);;
   } catch (error) {
-    console.error;
+    console.error(error);
   }
 }
 
